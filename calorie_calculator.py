@@ -7,16 +7,25 @@ from openai import OpenAI
 import os
 import streamlit as st
 
-try:
-    _create_unverified_https_context = ssl._create_unverified_context
-except AttributeError:
-    pass
-else:
-    ssl._create_default_https_context = _create_unverified_https_context
+def download_nltk_data():
+    try:
+        _create_unverified_https_context = ssl._create_unverified_context
+    except AttributeError:
+        pass
+    else:
+        ssl._create_default_https_context = _create_unverified_https_context
 
-# Download necessary NLTK data
-nltk.download('punkt')
-nltk.download('stopwords')
+    # List of required NLTK data
+    required_nltk_data = ['punkt', 'stopwords']
+
+    for item in required_nltk_data:
+        try:
+            nltk.data.find(f'tokenizers/{item}')
+        except LookupError:
+            nltk.download(item)
+
+# Call the function to download NLTK data
+download_nltk_data()
 
 # Initialize OpenAI client
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
@@ -46,18 +55,12 @@ def calculate_calories(user_input):
         )
         
         # Extract the calorie information from the response
-        response_text = response.choices[0].message.content.strip()
-        
-        # Use regex to find the first number in the response
-        match = re.search(r'\d+', response_text)
-        if match:
-            calories = float(match.group())
-        else:
+        try:
+            calories = float(response.choices[0].message.content.strip())
+        except ValueError:
             print(f"Could not parse calorie information for {food_query}")
-            print(f"AI response: {response_text}")
             calories = 0
         
         total_calories += calories
-        print(f"Estimated calories for '{food}': {calories}")
     
     return total_calories
