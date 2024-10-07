@@ -4,13 +4,14 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from openai import OpenAI
 import os
+import streamlit as st
 
 # Download necessary NLTK data
 nltk.download('punkt')
 nltk.download('stopwords')
 
 # Initialize OpenAI client
-client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 def calculate_calories(user_input):
     # Tokenize and clean the input
