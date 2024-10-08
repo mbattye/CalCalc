@@ -1,8 +1,6 @@
 import re
 import nltk
 import ssl
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
 from openai import OpenAI
 import os
 import streamlit as st
