@@ -5,28 +5,10 @@ from openai import OpenAI
 import os
 import streamlit as st
 
-def download_nltk_data():
-    try:
-        _create_unverified_https_context = ssl._create_unverified_context
-    except AttributeError:
-        pass
-    else:
-        ssl._create_default_https_context = _create_unverified_https_context
-
-    # List of required NLTK data
-    required_nltk_data = ['punkt', 'stopwords']
-
-    for item in required_nltk_data:
-        nltk.download(item, quiet=True)
-
-    # Explicitly set the NLTK data path
-    nltk.data.path.append(os.path.join(os.getcwd(), 'nltk_data'))
-
-# Call the function to download NLTK data
-download_nltk_data()
-
 # Get API key
 api_key = os.environ.get("OPENAI_API_KEY")
+# api_key = st.secrets.get("OPENAI_API_KEY")
+
 
 if not api_key:
     st.error("OpenAI API key not found. Please set it in Streamlit secrets or as an environment variable.")

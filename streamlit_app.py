@@ -1,8 +1,5 @@
 import streamlit as st
-from calorie_calculator import calculate_calories, download_nltk_data
-
-# Ensure NLTK data is downloaded
-download_nltk_data()
+from calorie_calculator import calculate_calories
 
 st.title("Daily Calorie Calculator")
 
